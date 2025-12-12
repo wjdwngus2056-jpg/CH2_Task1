@@ -70,7 +70,7 @@ void SetDamageDefense(Status& status, int& Damage, int& Defense)
     }
 }
 
-void StatusManagement(int mode, Status& status, Potion& potion)
+void StatusManagement(int mode, Status& status, Potion& potion, int& exp)
 {
     switch (mode)
     {
@@ -105,41 +105,52 @@ void StatusManagement(int mode, Status& status, Potion& potion)
         break;
     case 6:
 
+        exp += 1;
 		int levelupChoice = 0;
 
-        while (levelupChoice != 1 && levelupChoice != 2)
+        if (exp == 6)
         {
-            cout << "===================" << endl;
-            cout << "Level UP 능력치 선택" << endl;
-            cout << "1. 힘 10 UP (HP + 20, 공격력 + 20)" << endl;
-            cout << "2. 지능 10 UP  (MP + 20, 공격력 + 20)" << endl;
-            cout << "===================" << endl;
-            cout << "메뉴 선택 : ";
-            cin >> levelupChoice;
+            while (levelupChoice != 1 && levelupChoice != 2)
+            {
+                system("cls");
+                cout << "===================" << endl;
+                cout << "Level UP 능력치 선택" << endl;
+                cout << "1. 힘 10 UP (HP + 20, 공격력 + 20)" << endl;
+                cout << "2. 지능 10 UP  (MP + 20, 공격력 + 20)" << endl;
+                cout << "===================" << endl;
+                cout << "메뉴 선택 : ";
+                cin >> levelupChoice;
 
-            if (levelupChoice < 1 || levelupChoice > 2)
-            {
-                cout << "잘못된 선택지입니다. 다시 선택해주세요." << endl;
-            }
-            else
-            {
-				system("cls");
-                switch (levelupChoice)
+                if (levelupChoice < 1 || levelupChoice > 2)
                 {
-                case 1:
-                    cout << "힘이 10 증가하였습니다. (HP + 50, 공격력 + 30)" << endl;
-                    status.addStrength(10);
-                    break;
-                case 2:
-                    cout << "지능이 10 증가하였습니다. (MP + 50, 공격력 + 30)" << endl;
-                    status.addIntelligence(10);
+                    cout << "잘못된 선택지입니다. 다시 선택해주세요." << endl;
                 }
-                potion.addHPPotion(1);
-                potion.addMPPotion(1);
-                status.LevelUp();
+				else
+                {
+                    system("cls");
+                    switch (levelupChoice)
+                    {
+                    case 1:
+                        cout << "힘이 10 증가하였습니다. (HP + 50, 공격력 + 30)" << endl;
+                        status.addStrength(10);
+                        break;
+                    case 2:
+                        cout << "지능이 10 증가하였습니다. (MP + 50, 공격력 + 30)" << endl;
+                        status.addIntelligence(10);
+                    }
+                    potion.addHPPotion(1);
+                    potion.addMPPotion(1);
+                    status.LevelUp();
+                }
             }
+            exp = 0;
         }
-        break;
+        else
+        {
+            system("cls");
+            cout << "현재 경험치 : " << exp << " / 6" << endl;
+            break;
+        }
     }
 }
 
@@ -149,6 +160,7 @@ int main()
     Potion potion;
     int inputHP, inputMP, inputDamage, inputDefense;
     int mode = -1;
+    int exp = 0;
 
     SetHPMP(status, inputHP, inputMP);
     SetDamageDefense(status, inputDamage, inputDefense);
@@ -172,7 +184,7 @@ int main()
         cout << "메뉴 선택 : ";
         cin >> mode;
 
-        StatusManagement(mode, status, potion);
+        StatusManagement(mode, status, potion, exp);
     }
 
     system("cls");
